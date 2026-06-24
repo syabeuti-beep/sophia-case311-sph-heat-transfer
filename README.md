@@ -88,13 +88,23 @@ python3 case_generator/generate_case311_sph_heat.py --case-root .
 python3 case_generator/validate_case311.py --case-root .
 ```
 
-입력 생성기는 항상 입자 위치 확인용 그림도 함께 저장합니다.
+입력 생성기는 항상 입자 위치 확인용 그림도 함께 저장합니다. GitHub README에서도 바로 볼 수 있도록 아래 PNG 파일을 repository에 함께 track합니다.
 
 ```text
 validation/input_plots/input_particles_overview.png
 validation/input_plots/input_particles_3d_sample.png
 validation/input_plots/input_plot_summary.md
 ```
+
+### 초기 input 형상 미리보기
+
+Overview projection:
+
+![Input particle overview](validation/input_plots/input_particles_overview.png)
+
+3D sampled view:
+
+![Input particle 3D sample](validation/input_plots/input_particles_3d_sample.png)
 
 직접 다시 그리고 싶으면 다음을 실행합니다.
 
