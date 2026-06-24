@@ -1,0 +1,7 @@
+make :
+	nvcc -use_fast_math -arch=sm_61 -O3 SOPHIA_gpu.cu -o SOPHIA_gpu
+#	nvcc -use_fast_math -gencode arch=compute_60,code=sm_60 -m64 -ftz=true -prec-div=false -prec-sqrt=false -O3 SOPHIA_gpu.cu -o SOPHIA_gpu
+#	nvcc -use_fast_math -arch=sm_61 -O3 -Xptxas -v SOPHIA_gpu.cu -o SOPHIA_gpu
+#	nvcc --std=c++11 -gencode arch=compute_61,code=sm_61 -O3 SOPHIA_gpu.cu -o SOPHIA_gpu
+clean :
+	rm -rf *.*~ SOPHIA_gpu

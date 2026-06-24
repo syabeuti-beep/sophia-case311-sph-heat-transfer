@@ -1,0 +1,44 @@
+# Verification report
+
+## Completed checks
+
+1. PDF extraction was performed with PyMuPDF.
+2. Case 3-1-1 conditions were extracted from the paper text and Figure/Table area.
+3. SOPHIA code locations were inspected:
+   - `function_SPH_DEM_COUPLING.cuh`
+   - `function_TIME_ISPH.cuh`
+   - `function_OUTPUT.cuh`
+   - `ISPH.cuh`
+   - `function_PROP.cuh`
+   - `Parameters.cuh`
+4. A separate case workspace was created; the original SOPHIA source was not modified.
+5. Full input generation succeeded.
+6. Input sanity validation passed.
+7. Basic static delimiter-balance checks passed for modified `.cuh` files.
+8. `make -n` confirmed the compile command.
+
+## Real tool output summary
+
+```text
+generated DEM=320000 gas=40000 total=360000
+PASS DEM=320000 gas=40000
+input.txt size: 48,219,735 bytes
+input.txt lines: 6,480,001
+make -n: nvcc -w -use_fast_math -arch=sm_60 -O3 -expt-relaxed-constexpr SOPHIA_gpu.cu -o SOPHIA_gpu -I./cub-1.8.0/ -lpthread
+```
+
+## Blocker
+
+CUDA compile/run was not performed on this Mac mini because `nvcc` is not installed/found.
+
+```text
+nvcc: NOT_FOUND
+```
+
+## CUDA machine next command
+
+```bash
+cd /Users/hojin/Documents/SOPHIA_cases/advanced-heat-transfer-sph-interpolation/case-3-1-1-sph-interpolation-dem-heat-transfer/source_modified
+make
+./SOPHIA_gpu 1
+```

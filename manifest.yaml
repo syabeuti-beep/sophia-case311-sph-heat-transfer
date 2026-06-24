@@ -1,0 +1,85 @@
+case:
+  name: null
+  created: null
+  status: initialized
+source:
+  original_sophia_dir: /Users/hojin/Documents/SOPHIA에이전트/최신 SOPHIA코드
+  copied_source_dir: source_modified
+  original_preserved: true
+paper:
+  path: null
+  title: null
+provenance:
+  obsidian_notes_used: []
+  code_files_inspected: []
+  pdf_pages_used: []
+outputs:
+  generated_files: []
+  modified_copied_code_files: []
+validation:
+  input_sanity: not_run
+  build: not_run
+  run: not_run
+assumptions: []
+uncertainties: []
+
+created_at: 2026-06-24T14:45:42
+case_root: "/Users/hojin/Documents/SOPHIA_cases/advanced-heat-transfer-sph-interpolation/case-3-1-1-sph-interpolation-dem-heat-transfer"
+paper_path: "/Users/hojin/Downloads/advanced-heat-transfer-model-for-eulerian-lagrangian-simulations-of-industrial-gas-solid-flow-systems.pdf"
+original_code_checksums:
+  - path: "Cuda_Error.cuh"
+    sha256: bf798f6cff01092a41c9f200d19fd04726c6d0dbd01e6d237948b64b5bad2d56
+  - path: "ISPH.cuh"
+    sha256: cae88d0c86206fd61a0211b03ea058b28481c6bdcbfd7fcf2372b003a80a0d7b
+  - path: "ISPH_Calc_seperate.cuh"
+    sha256: b4712db91f3ead9067db435bea5cf82c4b2c2d6e16be275420044fe97a629192
+  - path: "Makefile"
+    sha256: 638fd86339d479966cbe715ac97e71bf3b98659907d6f8c2db635ce5a9399850
+  - path: "Parameters.cuh"
+    sha256: aec497dd7be574c0d4cde4cbf92bb6274b3864f299f305093b37ebefb0063206
+  - path: "SOPHIA_gpu"
+    sha256: 5bfc81304a138c9a4848f3eda5cdc355fdd101d56dae6a7fd4b25692cb156bee
+  - path: "SOPHIA_gpu.cu"
+    sha256: 30597e5c800f6ff63cbb50fa2882b5a96352981df6711afcaf1354223c5b5c13
+  - path: "Variable_Type.cuh"
+    sha256: 3f94f13f864de1a33caad507c813f0d5e5fea69a6fcc09de0e1227d050c5fc3f
+  - path: "class_Cuda_Particle_Array2.cuh"
+    sha256: b946b2cf3fe8f902a2278a942c0923b38c5b63ae1984db7ca5d136e3a740a14d
+  - path: "function_ALE.cuh"
+    sha256: b4f43aa49c1257cccf06033b243d3f8bfca115a9ff607a0d9a5fd66bcd29ebb4
+  - path: "function_BC.cuh"
+    sha256: ec96175b570ba4a6cfc581274d48ac8bf5bb5b3b9a1eb22e1a3b9fbe795dbbea
+  - path: "function_DEM_BC.cuh"
+    sha256: 98c45175dad6421ee3ff56b2d81dfbef4015fc899a33ba397b13d9e5c0f84d5e
+  - path: "function_DEM_INTERACTION.cuh"
+    sha256: 0641e70d71de83ddd59c56d277dfc94fdcc04d91cb833ede1764ea9890986152
+  - path: "function_INPUT_GEN.cuh"
+    sha256: c27b9b4d71aec645d018e28f52e2ea68e77568240e46cae4205c8be63db8b298
+  - path: "function_KNL.cuh"
+    sha256: c3350ec6879fdcb55a080245463c020c0dff748cb006d20dd3df5a0e52ca4d41
+  - path: "function_MASS.cuh"
+    sha256: ba2ef70fbe72c870fbe6132335679aa737f16cc1102e847e52fcb995309169eb
+  - path: "function_NNPS.cuh"
+    sha256: 5bd0b77d2d3e104b1c3fc4739e6f6dfc75faa9abb7aacea0eae73aadb62adc95
+  - path: "function_OUTPUT.cuh"
+    sha256: 1a409c72c49a8eab30c75347538fe9b96df4d473980d273faeb262125f629abf
+  - path: "function_PPE.cuh"
+    sha256: 08d2fd6c6e3b57b07b150eabcec38fd3de949458263ebaae4b4ddd4eb947636e
+  - path: "function_PREP.cuh"
+    sha256: 117cb2d356527be679262e608352682b03f57a6748f561f5915bfc792b7be6d5
+  - path: "function_PROP.cuh"
+    sha256: 53ca99b85a343e870c4c27ae9d21e46bc8b3576359cceca4e277d61ee98e398d
+  - path: "function_SPH_DEM_COUPLING.cuh"
+    sha256: 4d2c3f9be630015e69779b879dd75087503772dd12b2fcb56865d33045063afb
+  - path: "function_TIME_ISPH.cuh"
+    sha256: 62cfe7af27eb685838a49d869bae7e214adf63381f6cf9dafee21c26d2605a7e
+  - path: "function_XSPH.cuh"
+    sha256: 6d82be5e125c82120fd9fae6673dd4c2a35e8121a306ce2b6de5ef5302981342
+  - path: "function_init.cuh"
+    sha256: 9f04ca89387fe09df6bbaf866ea71aecd47a2ce08a4fc198eddc6bb23ea87cfd
+  - path: "input/data.txt"
+    sha256: dc5088103095358ee257af760379405670c933badf995e6b1db56ebe1f25a8bc
+  - path: "input/p_type.txt"
+    sha256: 1a903d3ccb2c702638b4d3ee5b1f1b4d198485a15974901ab86729001194b636
+  - path: "input/solv.txt"
+    sha256: 1afc9f0dd5cf1125d8959a49b2b9089b710126b1fcecaa444fe39e555173d82a

@@ -1,0 +1,51 @@
+paper:
+  title: Advanced Heat Transfer Model for Eulerian-Lagrangian Simulations of Industrial Gas-Solid Flow Systems
+  file: /Users/hojin/Downloads/advanced-heat-transfer-model-for-eulerian-lagrangian-simulations-of-industrial-gas-solid-flow-systems.pdf
+  doi: 10.1021/acs.iecr.5c02511
+case:
+  id: Case 3-1-1
+  purpose: Validate the fixed-bed solid temperature distribution using the paper's idea, but replacing the Eulerian grid heat solve with SPH interpolation over DEM particles.
+  coarse_grain_model: not used
+geometry:
+  fixed_bed_domain_m:
+    x: [0.0, 0.200]
+    y: [0.0, 0.040]
+    z: [0.0, 0.040]
+  lattice: primitive_cubic
+  void_fraction_reported_by_paper: 0.476
+particles:
+  dem:
+    count: 320000
+    diameter_m: 0.001
+    radius_m: 0.0005
+    density_kg_m3: 2500.0
+    cp_j_kgk: 840.0
+    conductivity_w_mk: 1.4
+    initial_temperature_k: 363.15
+    p_type: 1001
+    h_m_for_sph_heat_interpolation: 0.002
+  gas_sph_carrier:
+    count: 40000
+    spacing_m: 0.002
+    density_kg_m3: 1.2
+    viscosity_pa_s: 2.0e-5
+    cp_j_kgk: 1010.0
+    conductivity_w_mk: 0.025
+    temperature_k: 293.15
+    superficial_velocity_m_s: 1.0
+    p_type: 3
+solver:
+  dt_s: 1.0e-4
+  end_time_s: 10.0
+  output_frequency: 1000
+  conduction: true
+heat_transfer_model:
+  original_paper: Eulerian grid equation for solid-phase temperature using void-fraction-controlled effective thermal conductivity.
+  this_case_modification: Grid-free DEM heat diffusion using SPH interpolation of neighboring DEM particle temperatures and local solid volume fraction.
+  contact_state_used: false
+  output_fields_added:
+    - sph_solid_volume_fraction
+    - sph_ks_eff
+    - dtemp_dt
+notes:
+  - The text around Case 3 says grid size 6.0 mm, while extracted Table 4 shows 8.0 mm; this implementation intentionally does not use the paper grid because the requested modification is SPH interpolation instead of grid solve.

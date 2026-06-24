@@ -1,0 +1,40 @@
+modified_files:
+  - path: source_modified/function_SPH_DEM_COUPLING.cuh
+    changes:
+      - Added SOPHIA_SPH_DEM_HEAT_ENABLE compile-time option.
+      - Added grid-free DEM solid heat conduction using SPH interpolation over neighboring DEM particles.
+      - Added local solid volume fraction estimate from DEM particle volumes and SPH kernel weights.
+      - Added effective conductivity function sophia_case311_ks_eff_from_solid_fraction(alpha_s).
+      - Combined new solid-solid SPH conduction dT/dt with existing SPH gas/fluid convective heat-transfer dT/dt.
+      - Stored diagnostic values in P1_dem[i].test1 and P1_dem[i].test2.
+  - path: source_modified/function_OUTPUT.cuh
+    changes:
+      - Added VTK output field sph_solid_volume_fraction from P1.test1.
+      - Added VTK output field sph_ks_eff from P1.test2.
+  - path: source_modified/ISPH.cuh
+    changes:
+      - Patched hard-coded computational domain to cover Case 3-1-1 fixed bed, 200 mm x 40 mm x 40 mm.
+  - path: source_modified/Parameters.cuh
+    changes:
+      - Set gas density and inlet constants to Case 3-1-1/Table 1 values.
+  - path: source_modified/function_PROP.cuh
+    changes:
+      - Set solid conductivity to 1.4 W/(m K).
+      - Set gas conductivity to 0.025 W/(m K).
+      - Set solid specific heat to 840 J/(kg K).
+      - Set gas specific heat to 1010 J/(kg K).
+  - path: case_generator/generate_case311_sph_heat.py
+    changes:
+      - Generates full Case 3-1-1 DEM primitive-cubic fixed bed plus gas SPH carrier particles.
+  - path: case_generator/validate_case311.py
+    changes:
+      - Validates label layout, particle counts, DEM radius, gas p_type, and finite values.
+verification:
+  input_generation: passed
+  input_sanity: passed
+  full_case_particles:
+    dem: 320000
+    gas_sph_carrier: 40000
+    total: 360000
+  nvcc_available_on_mac_mini: false
+  cuda_compile_run: not_performed_because_nvcc_not_found

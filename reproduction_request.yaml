@@ -1,0 +1,23 @@
+paper:
+  path: null
+  title: null
+  target_section: null
+  target_figure_or_table: null
+experiment:
+  name: null
+  physics:
+    sph: true
+    isph: true
+    dem: false
+    sph_dem_coupling: false
+  dimensionality: null
+  geometry: null
+  initial_conditions: null
+  boundary_conditions: null
+  material_properties: null
+  output_quantities: []
+constraints:
+  preserve_original_code: true
+  create_new_case_folder: true
+  run_simulation: false
+  cuda_environment: null

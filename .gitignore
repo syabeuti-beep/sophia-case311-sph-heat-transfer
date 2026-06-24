@@ -1,0 +1,26 @@
+# Local/tool settings
+.DS_Store
+.claude/
+**/.claude/
+
+# Build products and binaries
+source_modified/SOPHIA_gpu
+source_modified/*.o
+source_modified/*.out
+source_modified/*.*~
+
+# Runtime outputs / generated plots
+source_modified/plotdata/
+source_modified/input_generated/
+source_modified/Result/
+source_modified/result/
+source_modified/output/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Keep generated input files tracked for reproducibility.
+!source_modified/input/input.txt
+!source_modified/input/solv.txt
+!source_modified/input/data.txt
