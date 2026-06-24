@@ -44,8 +44,7 @@ def write_input(path, particles):
     with path.open('w', encoding='utf-8') as f:
         f.write('\t'.join(map(str, LABELS))+'\n')
         for row in particles:
-            for v in row:
-                f.write(f'{v}\n')
+            f.write('\t'.join(f'{v}' for v in row)+'\n')
 
 def write_solv(path, cfg):
     s=cfg['solver']

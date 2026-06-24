@@ -17,36 +17,27 @@
 7. Basic static delimiter-balance checks passed for modified `.cuh` files.
 8. `make -n` confirmed the compile command.
 9. Input particle plots were generated and inspected visually.
-10. `gpu_count_particle_numbers2` was patched and probed with the generated input: 6,480,000 scalar lines / 18 labels = 360,000 particles.
+10. `input.txt` was changed back to the original SOPHIA-friendly format: one particle per tab-separated line, plus one header line.
+11. `gpu_count_particle_numbers2` was restored to count particles as `line_count - 1`, and probed with the generated input: 360,001 total lines -> 360,000 particles.
 
-## Particle-count bug found after CUDA run
+## Input file format and particle count
 
-The generated `input.txt` was correct, but SOPHIA's original particle-count helper was wrong for this file layout.
-
-`input.txt` format:
+The current `input.txt` format is:
 
 ```text
 first line: labels for 18 variables
-remaining lines: one scalar value per line
+remaining lines: one particle per line, with 18 tab-separated values
 ```
 
-The old `gpu_count_particle_numbers2` returned `line_count - 1`. For this case that meant:
+Therefore the original SOPHIA particle-count convention is valid again:
 
 ```text
-6,480,000 scalar value lines -> num_part = 6,480,000
+num_part = total_input_lines - 1 header line
+         = 360,001 - 1
+         = 360,000
 ```
 
-Only the first 360,000 particle records were actually filled by `read_input`. The remaining 6,120,000 allocated `part1` slots stayed zero-initialized, so `p_type == 0 < 1000` and they were counted as SPH. That explains the observed SPH count:
-
-```text
-40,000 real gas SPH particles + 6,120,000 zero tail slots = 6,160,000 SPH particles
-```
-
-The fix is to count particles as:
-
-```text
-scalar_data_lines / number_of_input_labels = 6,480,000 / 18 = 360,000
-```
+This avoids the previous failure mode where a scalar-per-line file had 6,480,000 data lines and was interpreted as 6,480,000 particles.
 
 ## Input particle plot files
 
@@ -69,8 +60,9 @@ The overview image shows the expected Case 3-1-1 rectangular fixed bed:
 ```text
 generated DEM=320000 gas=40000 total=360000
 PASS DEM=320000 gas=40000
-input.txt size: 48,219,735 bytes
-input.txt lines: 6,480,001
+input.txt format: one particle per tab-separated line
+input.txt lines: 360,001
+input.txt data lines / particles: 360,000
 make -n: nvcc -w -use_fast_math -arch=sm_60 -O3 -expt-relaxed-constexpr SOPHIA_gpu.cu -o SOPHIA_gpu -I./cub-1.8.0/ -lpthread
 ```
 

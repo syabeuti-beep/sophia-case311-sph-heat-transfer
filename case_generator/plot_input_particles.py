@@ -19,18 +19,15 @@ def read_xyz_ptype(path: Path):
         if missing:
             raise SystemExit(f'missing labels in input.txt: {missing}')
         vals = []
-        row = []
         ncols = len(labels)
-        for line in f:
+        for line_no, line in enumerate(f, start=2):
             s = line.strip()
             if not s:
                 continue
-            row.append(float(s))
-            if len(row) == ncols:
-                vals.append((row[idx['x']], row[idx['y']], row[idx['z']], row[idx['p_type']], row[idx['temp']]))
-                row = []
-        if row:
-            raise SystemExit('input.txt ended with a partial particle record')
+            row = [float(x) for x in s.split()]
+            if len(row) != ncols:
+                raise SystemExit(f'line {line_no}: expected {ncols} tab-separated values, got {len(row)}')
+            vals.append((row[idx['x']], row[idx['y']], row[idx['z']], row[idx['p_type']], row[idx['temp']]))
     arr = np.asarray(vals, dtype=np.float64)
     return arr
 

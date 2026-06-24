@@ -875,11 +875,9 @@ void read_table(const char*FileName)
 
 int_t gpu_count_particle_numbers2(const char*FileName)
 {
-	int_t scalar_lines=0;
-	int_t nov=0;
+	int_t idx=0;
 	int_t nop;
 	char buffer[1024];
-	char *tok;
 
 	FILE*inFile;
 
@@ -888,35 +886,11 @@ int_t gpu_count_particle_numbers2(const char*FileName)
 		printf("ERROR: cannot open input file %s\n", FileName);
 		return 0;
 	}
-
-	// First line contains variable labels. The remaining lines contain one scalar
-	// value per line, so the particle count is scalar_lines / number_of_variables.
-	// The old code returned line_count-1, which interpreted every scalar as one
-	// particle. For an 18-column input with 360,000 particles, that inflated
-	// num_part to 6,480,000 and made zero-initialized tail slots appear as SPH.
-	if(fgets(buffer,1024,inFile)!=NULL){
-		tok=strtok(buffer,"	 \r\n");
-		while(tok!=NULL){
-			nov++;
-			tok=strtok(NULL,"	 \r\n");
-		}
-	}
-
-	while(fgets(buffer,1024,inFile)!=NULL){
-		if(strlen(buffer)>0 && strspn(buffer," 	\r\n")!=strlen(buffer)) scalar_lines+=1;
-	}
+	while(fgets(buffer,1024,inFile)!=NULL) idx+=1;
 	fclose(inFile);
 
-	if(nov<=0){
-		printf("ERROR: no variable labels found in %s\n", FileName);
-		return 0;
-	}
-	if((scalar_lines%nov)!=0){
-		printf("WARNING: input scalar count %d is not divisible by variable count %d\n", scalar_lines, nov);
-	}
-
-	nop=scalar_lines/nov;
-	printf("Input particle count: scalars=%d variables=%d particles=%d\n", scalar_lines, nov, nop);
+	nop=idx-1;
+	printf("Input particle count: lines=%d particles=%d\n", idx, nop);
 
 	return nop;
 }
