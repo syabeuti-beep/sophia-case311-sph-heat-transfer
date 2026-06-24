@@ -8,13 +8,15 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--case-root', default='.')
     case=Path(ap.parse_args().case_root).resolve(); inp=case/'source_modified/input/input.txt'
     errors=[]
+    n_dem=n_gas=parser_particle_count=0
+    vals=[]
+    minT=1e9; maxT=-1e9
     if not inp.exists():
         errors.append(f'missing {inp}')
     else:
         with inp.open() as f:
             labels=[int(x) for x in f.readline().split()]
             if labels != LABELS: errors.append(f'labels mismatch: {labels}')
-            vals=[]; n_dem=n_gas=0; minT=1e9; maxT=-1e9
             row=[]
             for line_no, line in enumerate(f, start=2):
                 s=line.strip()
@@ -35,8 +37,13 @@ def main():
                     row=[]
             if row: errors.append('trailing partial particle row')
             if len(vals)%len(LABELS)!=0: errors.append('value count not divisible by label count')
+            parser_particle_count = len(vals)//len(LABELS)
+            if parser_particle_count != n_dem + n_gas:
+                errors.append(f'SOPHIA parser particle-count mismatch: scalar_count/label_count={parser_particle_count}, classified={n_dem+n_gas}')
+            if parser_particle_count != 360000:
+                errors.append(f'expected 360000 total particles for full Case 3-1-1, got parser_count={parser_particle_count}')
             if n_dem != 320000: errors.append(f'expected 320000 DEM particles for full Case 3-1-1, got {n_dem}')
-            if n_gas <= 0: errors.append('gas SPH carrier particles missing')
+            if n_gas != 40000: errors.append(f'expected 40000 gas SPH carrier particles for full Case 3-1-1, got {n_gas}')
     for rel in ['source_modified/function_SPH_DEM_COUPLING.cuh','source_modified/function_OUTPUT.cuh','source_modified/input/solv.txt','source_modified/input/data.txt']:
         if not (case/rel).exists(): errors.append(f'missing {rel}')
     report=case/'validation/input_sanity_report.md'; report.parent.mkdir(parents=True, exist_ok=True)
@@ -44,6 +51,6 @@ def main():
         report.write_text('# Input sanity report\n\nStatus: FAIL\n\n'+'\n'.join(f'- {e}' for e in errors)+'\n', encoding='utf-8')
         print(f'FAIL {len(errors)} issues; see {report}')
         raise SystemExit(1)
-    report.write_text(f'# Input sanity report\n\nStatus: PASS\n\nDEM particles: {n_dem}\nGas SPH particles: {n_gas}\nTemperature range: {minT} - {maxT} K\n', encoding='utf-8')
+    report.write_text(f'# Input sanity report\n\nStatus: PASS\n\nDEM particles: {n_dem}\nGas SPH particles: {n_gas}\nTotal particles: {parser_particle_count}\nInput scalar lines: {len(vals)}\nInput labels: {len(LABELS)}\nTemperature range: {minT} - {maxT} K\n', encoding='utf-8')
     print(f'PASS DEM={n_dem} gas={n_gas} report={report}')
 if __name__ == '__main__': main()

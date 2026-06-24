@@ -17,6 +17,36 @@
 7. Basic static delimiter-balance checks passed for modified `.cuh` files.
 8. `make -n` confirmed the compile command.
 9. Input particle plots were generated and inspected visually.
+10. `gpu_count_particle_numbers2` was patched and probed with the generated input: 6,480,000 scalar lines / 18 labels = 360,000 particles.
+
+## Particle-count bug found after CUDA run
+
+The generated `input.txt` was correct, but SOPHIA's original particle-count helper was wrong for this file layout.
+
+`input.txt` format:
+
+```text
+first line: labels for 18 variables
+remaining lines: one scalar value per line
+```
+
+The old `gpu_count_particle_numbers2` returned `line_count - 1`. For this case that meant:
+
+```text
+6,480,000 scalar value lines -> num_part = 6,480,000
+```
+
+Only the first 360,000 particle records were actually filled by `read_input`. The remaining 6,120,000 allocated `part1` slots stayed zero-initialized, so `p_type == 0 < 1000` and they were counted as SPH. That explains the observed SPH count:
+
+```text
+40,000 real gas SPH particles + 6,120,000 zero tail slots = 6,160,000 SPH particles
+```
+
+The fix is to count particles as:
+
+```text
+scalar_data_lines / number_of_input_labels = 6,480,000 / 18 = 360,000
+```
 
 ## Input particle plot files
 

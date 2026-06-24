@@ -17,6 +17,10 @@ modified_files:
   - path: source_modified/Parameters.cuh
     changes:
       - Set gas density and inlet constants to Case 3-1-1/Table 1 values.
+  - path: source_modified/function_init.cuh
+    changes:
+      - Fixes `gpu_count_particle_numbers2` so SOPHIA counts particles as scalar_data_lines / input_label_count instead of treating every scalar line as a particle.
+      - Prevents the 18-column input file from inflating `num_part` from 360,000 to 6,480,000 and making zero-initialized tail slots appear as SPH.
   - path: source_modified/function_PROP.cuh
     changes:
       - Set solid conductivity to 1.4 W/(m K).
@@ -37,6 +41,11 @@ modified_files:
 verification:
   input_generation: passed
   input_sanity: passed
+  parser_particle_count_fix: passed
+  parser_particle_count_probe:
+    scalar_lines: 6480000
+    labels: 18
+    particles: 360000
   full_case_particles:
     dem: 320000
     gas_sph_carrier: 40000
