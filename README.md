@@ -27,6 +27,9 @@ case_generator/generate_case311_sph_heat.py     # input 생성기
 case_generator/validate_case311.py              # input sanity checker
 validation/case311_generation_report.md
 validation/input_sanity_report.md
+validation/input_plots/input_particles_overview.png
+validation/input_plots/input_particles_3d_sample.png
+validation/input_plots/input_plot_summary.md
 experiment_spec.yaml
 patch_summary.yaml
 ```
@@ -83,6 +86,20 @@ make
 cd /Users/hojin/Documents/SOPHIA_cases/advanced-heat-transfer-sph-interpolation/case-3-1-1-sph-interpolation-dem-heat-transfer
 python3 case_generator/generate_case311_sph_heat.py --case-root .
 python3 case_generator/validate_case311.py --case-root .
+```
+
+입력 생성기는 항상 입자 위치 확인용 그림도 함께 저장합니다.
+
+```text
+validation/input_plots/input_particles_overview.png
+validation/input_plots/input_particles_3d_sample.png
+validation/input_plots/input_plot_summary.md
+```
+
+직접 다시 그리고 싶으면 다음을 실행합니다.
+
+```bash
+python3 case_generator/plot_input_particles.py --case-root .
 ```
 
 작은 smoke-test 입력을 만들고 싶으면 다음을 쓸 수 있습니다.

@@ -26,6 +26,11 @@ modified_files:
   - path: case_generator/generate_case311_sph_heat.py
     changes:
       - Generates full Case 3-1-1 DEM primitive-cubic fixed bed plus gas SPH carrier particles.
+      - Calls the input-particle plotting script after generation so geometry images are always saved.
+  - path: case_generator/plot_input_particles.py
+    changes:
+      - Creates 2D projection and 3D sampled visual checks of generated `input.txt` particle locations.
+      - Writes plot images and a compact coordinate-range summary under `validation/input_plots/`.
   - path: case_generator/validate_case311.py
     changes:
       - Validates label layout, particle counts, DEM radius, gas p_type, and finite values.

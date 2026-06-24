@@ -16,6 +16,23 @@
 6. Input sanity validation passed.
 7. Basic static delimiter-balance checks passed for modified `.cuh` files.
 8. `make -n` confirmed the compile command.
+9. Input particle plots were generated and inspected visually.
+
+## Input particle plot files
+
+```text
+validation/input_plots/input_particles_overview.png
+validation/input_plots/input_particles_3d_sample.png
+validation/input_plots/input_plot_summary.md
+```
+
+The overview image shows the expected Case 3-1-1 rectangular fixed bed:
+
+- x extent: approximately 0 to 200 mm
+- y extent: approximately 0 to 40 mm
+- z extent: approximately 0 to 40 mm
+- DEM solid particles and gas SPH carrier particles both occupy the intended block.
+- No obvious geometry inversion or missing region was visible in the XY, XZ, and YZ projections.
 
 ## Real tool output summary
 

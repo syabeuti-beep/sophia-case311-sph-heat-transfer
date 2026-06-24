@@ -158,5 +158,16 @@ def main():
     (case/'case_generator/case311_config.txt').write_text(repr(cfg), encoding='utf-8')
     report=case/'validation/case311_generation_report.md'; report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(f'# Case 3-1-1 input generation report\n\nDEM particles: {n_dem}\nGas SPH particles: {n_gas}\nTotal: {len(particles)}\nDomain: {cfg["domain_m"]}\n\nThe original paper uses an Eulerian grid heat-transfer solve. This case keeps the fixed-bed geometry but replaces solid heat conduction with DEM-neighbor SPH interpolation in function_SPH_DEM_COUPLING.cuh.\n', encoding='utf-8')
+
+    # Always save visual input-particle checks together with generated inputs.
+    # These images let a human quickly verify the fixed-bed geometry before running CUDA.
+    try:
+        from subprocess import run
+        plot_script = case/'case_generator'/'plot_input_particles.py'
+        if plot_script.exists():
+            run(['python3', str(plot_script), '--case-root', str(case)], check=True)
+    except Exception as exc:
+        print(f'WARNING: input particle plot generation failed: {exc}')
+
     print(f'generated DEM={n_dem} gas={n_gas} total={len(particles)}')
 if __name__ == '__main__': main()
