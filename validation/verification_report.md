@@ -19,6 +19,8 @@
 9. Input particle plots were generated and inspected visually.
 10. `input.txt` was changed back to the original SOPHIA-friendly format: one particle per tab-separated line, plus one header line.
 11. `gpu_count_particle_numbers2` was restored to count particles as `line_count - 1`, and probed with the generated input: 360,001 total lines -> 360,000 particles.
+12. VTK output interval was changed to every 100 steps. With `dt = 1.0e-4 s`, this writes a VTK file every `0.01 s`.
+13. Legacy VTK metadata was checked statically: `POINTS` count now uses the same `p_type > 1000` condition as the write loop, and `FIELD FieldData` declares 12 arrays matching the 12 arrays actually written.
 
 ## Input file format and particle count
 
@@ -63,6 +65,8 @@ PASS DEM=320000 gas=40000
 input.txt format: one particle per tab-separated line
 input.txt lines: 360,001
 input.txt data lines / particles: 360,000
+plot-output frequency: 100 steps = 0.01 s at dt=1.0e-4 s
+VTK FIELD arrays: 12 declared / 12 written
 make -n: nvcc -w -use_fast_math -arch=sm_60 -O3 -expt-relaxed-constexpr SOPHIA_gpu.cu -o SOPHIA_gpu -I./cub-1.8.0/ -lpthread
 ```
 

@@ -98,8 +98,8 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 	int_t Nparticle=0;							// number of fluid particles (x>0.00) for 3D PGSFR calculation
 	//for(i=0;i<nop;i++) if(P1[i].x>0) Nparticle++;
 
-	for(i=0;i<nop;i++) if(P1[i].dem_idx>0) Nparticle++;
-	printf("test Particle %d\n",Nparticle);
+	for(i=0;i<nop;i++) if(P1[i].p_type>1000) Nparticle++;
+	printf("Solid VTK particles %d\n",Nparticle);
 
 	float val;
 		float val1, val2, val3;
@@ -132,10 +132,11 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"POINT_DATA\t%d\n",Nparticle);
 
-	fprintf(outFile_vtk,"FIELD FieldData\t10\n");
+	fprintf(outFile_vtk,"FIELD FieldData	12\n");
 
 
 
@@ -148,6 +149,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"mag_uijf\t1\t%d\tfloat\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -157,6 +159,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"Euler\t1\t%d\tfloat\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -166,14 +169,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
-
-
-
-
-
-
-
-	
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"porosity\t1\t%d\tfloat\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -183,6 +179,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"uz\t1\t%d\tfloat\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -192,10 +189,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
-
-	
-
-
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"Q_sd\t1\t%d\tfloat\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -205,12 +199,9 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
-	
+	fprintf(outFile_vtk,"\n");
 
-
-
-
-	fprintf(outFile_vtk,"ftotal_z\t1\t%d\tfloat\n",Nparticle);
+	fprintf(outFile_vtk,"ftotal_z	1	%d	float\n",Nparticle);
 	for(i=0;i<nop;i++){
 		//if(P1[i].x>0){
 		if(P1[i].p_type>1000){
@@ -218,10 +209,11 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 
 
-	// fprintf(outFile_vtk,"ftotalx\t1\t%d\tfloat\n",Nparticle);
+	// fprintf(outFile_vtk,"ftotalx	1	%d	float\n",Nparticle);
 	// for(i=0;i<nop;i++){
 	// 	//if(P1[i].x>0){
 	// 	if(P1[i].p_type>1000){
@@ -240,6 +232,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 
 
@@ -265,6 +258,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"sph_solid_volume_fraction	1	%d	float\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -273,6 +267,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"sph_ks_eff	1	%d	float\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -281,8 +276,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
-
-
+	fprintf(outFile_vtk,"\n");
 
 	fprintf(outFile_vtk,"dtemp_dt	1	%d	float\n",Nparticle);
 	for(i=0;i<nop;i++){
@@ -292,6 +286,7 @@ void save_plot_fluid_vtk_bin_solid_dem(part1*P1,part3*P3)
 			fwrite((void*)&val,sizeof(float),1,outFile_vtk);
 		}
 	}
+	fprintf(outFile_vtk,"\n");
 
 
 	// fprintf(outFile_vtk,"mag_uij\t1\t%d\tfloat\n",Nparticle);

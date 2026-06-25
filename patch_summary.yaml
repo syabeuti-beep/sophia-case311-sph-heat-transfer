@@ -11,6 +11,9 @@ modified_files:
     changes:
       - Added VTK output field sph_solid_volume_fraction from P1.test1.
       - Added VTK output field sph_ks_eff from P1.test2.
+      - Fixed VTK POINTS count to match the actual DEM particles written (`p_type > 1000`).
+      - Fixed legacy VTK FIELD metadata count to 12 arrays so ParaView can display particle fields instead of only Solid Color.
+      - Added newline separators after binary VTK arrays for safer legacy VTK parsing.
   - path: source_modified/ISPH.cuh
     changes:
       - Patched hard-coded computational domain to cover Case 3-1-1 fixed bed, 200 mm x 40 mm x 40 mm.
@@ -30,6 +33,7 @@ modified_files:
   - path: case_generator/generate_case311_sph_heat.py
     changes:
       - Generates full Case 3-1-1 DEM primitive-cubic fixed bed plus gas SPH carrier particles.
+      - Sets plot-output frequency to 100 steps so VTK output is written every 0.01 s for dt=1.0e-4 s.
       - Calls the input-particle plotting script after generation so geometry images are always saved.
   - path: case_generator/plot_input_particles.py
     changes:
@@ -52,5 +56,25 @@ verification:
     dem: 320000
     gas_sph_carrier: 40000
     total: 360000
+  vtk_output_interval:
+    dt_s: 0.0001
+    plot_output_frequency_steps: 100
+    interval_s: 0.01
+  vtk_field_metadata:
+    points_count_condition: p_type_gt_1000
+    field_array_count: 12
+    field_arrays:
+      - itype
+      - mag_uijf
+      - Euler
+      - porosity
+      - uz
+      - Q_sd
+      - ftotal_z
+      - temperature_surface
+      - rad
+      - sph_solid_volume_fraction
+      - sph_ks_eff
+      - dtemp_dt
   nvcc_available_on_mac_mini: false
   cuda_compile_run: not_performed_because_nvcc_not_found

@@ -58,7 +58,7 @@ neighbor cell type (3X3/5X5)								3X3
 filtering frequency: 										40
 density-renormalization frequency: 						1
 temperature-filtering frequency:							10
-plot-output frequency:									    1000
+plot-output frequency:									    100
 plot-variables:                         5 rho pres p_type temp dtemp_dt
 
 velocity-limit (m/s): 										40.0

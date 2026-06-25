@@ -13,7 +13,7 @@ DEFAULT = {
     'gas': {'spacing_m': 0.002, 'density_kg_m3': 1.2, 'viscosity_pa_s': 2.0e-5,
             'specific_heat_j_kgk': 1010.0, 'thermal_conductivity_w_mk': 0.025,
             'temperature_k': 293.15, 'superficial_velocity_m_s': 1.0, 'h_m': 0.002, 'p_type': 3},
-    'solver': {'dt_s': 1.0e-4, 'end_time_s': 10.0, 'output_frequency': 1000,
+    'solver': {'dt_s': 1.0e-4, 'end_time_s': 10.0, 'output_frequency': 100,
                'kappa': 2.0, 'sound_speed_m_s': 20.0, 'reference_density': 1.2}
 }
 

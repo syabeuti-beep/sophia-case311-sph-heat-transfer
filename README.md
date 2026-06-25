@@ -68,7 +68,7 @@ source_modified/function_SPH_DEM_COUPLING.cuh
 
 ## 실행 준비
 
-CUDA/NVIDIA GPU 환경에서 다음을 실행합니다.
+CUDA/NVIDIA GPU 환경에서 다음을 실행합니다. 현재 `dt = 1.0e-4 s`, `plot-output frequency = 100`으로 설정되어 있어서 VTK는 항상 `0.01 s`마다 한 번씩 저장됩니다.
 
 ```bash
 cd /Users/hojin/Documents/SOPHIA_cases/advanced-heat-transfer-sph-interpolation/case-3-1-1-sph-interpolation-dem-heat-transfer/source_modified
@@ -122,7 +122,7 @@ python3 case_generator/generate_case311_sph_heat.py --case-root . --demo
 
 ## 출력 확인
 
-VTK solid output에 다음 field가 추가됩니다.
+VTK solid output에 다음 field가 추가/정리됩니다. ParaView에서 Solid Color만 보이면, 최신 commit으로 rebuild했는지 확인하세요. 이번 수정에서는 `POINTS` 개수와 실제 written DEM point 개수를 일치시키고, `FIELD FieldData` 개수를 12개로 맞췄습니다.
 
 ```text
 temperature_surface
