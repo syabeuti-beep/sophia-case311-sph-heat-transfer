@@ -21,6 +21,10 @@
 11. `gpu_count_particle_numbers2` was restored to count particles as `line_count - 1`, and probed with the generated input: 360,001 total lines -> 360,000 particles.
 12. VTK output interval was changed to every 100 steps. With `dt = 1.0e-4 s`, this writes a VTK file every `0.01 s`.
 13. Legacy VTK metadata was checked statically: `POINTS` count now uses the same `p_type > 1000` condition as the write loop, and `FIELD FieldData` declares 12 arrays matching the 12 arrays actually written.
+14. The copied SOPHIA solid-fluid heat-transfer expression was re-audited against Imatani & Sakai Eqs. (29)-(31).
+15. Static search confirmed the old Ranz-Marshall-style terms (`Nu = 2 + 0.6 Re^0.5 Pr^(1/3)`, hard-coded `0.0518`, and `h_conv = Nu * ki / d`) are no longer present in `source_modified/*.cuh`.
+16. Full input generation and input sanity validation were re-run after the equation patch.
+17. A real `make` compile attempt was made and failed only because `nvcc` is not installed on this Mac mini.
 
 ## Input file format and particle count
 
@@ -65,9 +69,12 @@ PASS DEM=320000 gas=40000
 input.txt format: one particle per tab-separated line
 input.txt lines: 360,001
 input.txt data lines / particles: 360,000
+solid-fluid heat transfer: Imatani & Sakai Eq. (29) Gunn Nu_fs + Eq. (30) Pr + Eq. (31) h_fs/Q_fs
+old copied convection forms removed from source_modified/*.cuh: Ranz-Marshall Nu, hard-coded 0.0518, h_conv = Nu * ki / d
 plot-output frequency: 100 steps = 0.01 s at dt=1.0e-4 s
 VTK FIELD arrays: 12 declared / 12 written
 make -n: nvcc -w -use_fast_math -arch=sm_60 -O3 -expt-relaxed-constexpr SOPHIA_gpu.cu -o SOPHIA_gpu -I./cub-1.8.0/ -lpthread
+make: failed with `make: nvcc: No such file or directory`
 ```
 
 ## Blocker

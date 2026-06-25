@@ -47,5 +47,11 @@ heat_transfer_model:
     - sph_solid_volume_fraction
     - sph_ks_eff
     - dtemp_dt
+  solid_fluid_convection:
+    paper_equations: Eq.29_Eq.30_Eq.31
+    nusselt_correlation: Gunn packed/fluidized-bed correlation
+    prandtl: Pr = Cpf * mu_f / k_f
+    heat_transfer_coefficient: h_fs = Nu_fs * k_f / d_p
+    volumetric_source: Q_fs = h_fs * (6/d_p) * (T_f - T_s)
 notes:
   - The text around Case 3 says grid size 6.0 mm, while extracted Table 4 shows 8.0 mm; this implementation intentionally does not use the paper grid because the requested modification is SPH interpolation instead of grid solve.

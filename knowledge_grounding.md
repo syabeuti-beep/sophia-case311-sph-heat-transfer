@@ -73,7 +73,17 @@ This is a pragmatic grid-free analogue of the paper's void-fraction-controlled e
 dT_i/dt += ks_eff/(rho_i cp_i) * sum_j 2 V_j (T_i - T_j) dW/dr / (r_ij + 0.01 h_ij)
 ```
 
-5. Add this solid-solid diffusion term to SOPHIA's existing DEM-gas convective heat-transfer term.
+5. Use the paper's solid-fluid heat-transfer law for DEM-gas convection:
+
+```text
+Nu_fs = (7 - 10 eps + 5 eps^2)(1 + 0.7 Re_p^0.2 Pr^(1/3))
+        + (1.33 - 2.4 eps + 1.2 eps^2) Re_p^0.7 Pr^(1/3)
+Pr = C_pf mu_f / k_f
+h_fs = Nu_fs k_f / d_p
+Q_fs = h_fs (6/d_p) (T_f - T_s)
+```
+
+6. Add the solid-solid diffusion term to the paper-aligned DEM-gas convective heat-transfer term.
 
 ## Known ambiguity
 

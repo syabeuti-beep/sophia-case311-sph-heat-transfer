@@ -33,6 +33,22 @@ __device__ Real sophia_case311_ks_eff_from_solid_fraction(Real alpha_s)
 	return kf+(ks-kf)*pow(alpha_s,1.5);
 }
 
+__device__ Real sophia_case311_gunn_nusselt(Real eps, Real rep, Real pr)
+{
+	// Imatani & Sakai (2025) Eq. (29), Gunn packed/fluidized-bed correlation:
+	// Nu_fs = (7 - 10 eps + 5 eps^2)(1 + 0.7 Re_p^0.2 Pr^(1/3))
+	//       + (1.33 - 2.4 eps + 1.2 eps^2) Re_p^0.7 Pr^(1/3)
+	// Valid in the paper for 0.35 <= eps <= 1 and Re_p <= 1e5.
+	eps=sophia_clamp_real(eps,0.35,1.0);
+	rep=fmax(rep,(Real)0.0);
+	pr=fmax(pr,(Real)1.0e-12);
+	Real eps2=eps*eps;
+	Real pr13=pow(pr,(Real)(1.0/3.0));
+	Real term1=(7.0-10.0*eps+5.0*eps2)*(1.0+0.7*pow(rep,(Real)0.2)*pr13);
+	Real term2=(1.33-2.4*eps+1.2*eps2)*pow(rep,(Real)0.7)*pr13;
+	return fmax(term1+term2,(Real)0.0);
+}
+
 __global__ void KERNEL_DEM_coupling3D_dem(int_t inout,int_t*g_str_dem,int_t*g_end_dem,part1*P1_dem,part2*P2_dem,part3*P3_dem,
 											int_t*g_str_sph,int_t*g_end_sph,part1*P1_sph,part2*P2_sph,part3*P3_sph)
 {
@@ -450,9 +466,13 @@ __global__ void KERNEL_DEM_coupling3D_dem(int_t inout,int_t*g_str_dem,int_t*g_en
 
 		
 		
-		Pr_f = 0.7;
-		Nu_f = 2.0 + 0.6 * pow(Ref, 0.5) * pow(Pr_f, 1 / 3);
-		h_conv_f = Nu_f * 0.0518 / di;
+		// Imatani & Sakai (2025) Eq. (30): Pr = Cpf * mu_f / k_f.
+		Real k_f=conductivity(temp_f,1);
+		Pr_f = heat_capacity(temp_f,1) * VISCOSITY_AIR / (k_f+1.0e-15);
+		// Eq. (29): Gunn packed/fluidized-bed Nusselt correlation with local void fraction eps=pori.
+		Nu_f = sophia_case311_gunn_nusselt(pori,Ref,Pr_f);
+		// Eq. (31): h_fs = Nu_fs * k_f / d_p and Q_fs = h_fs * a_p * (T_f - T_s).
+		h_conv_f = Nu_f * k_f / (di+1.0e-15);
 		dq_vol = h_conv_f * a_ht * temp_ijf;
 
 		 P1_dem[i].Fdx_df=dfxf;
@@ -494,9 +514,11 @@ __global__ void KERNEL_DEM_coupling3D_dem(int_t inout,int_t*g_str_dem,int_t*g_en
 
 		
 
-		Pr_a = 1.0;
-		Nu_a = 2.0 + 0.6 * pow(Rea, 0.5) * pow(Pr_a, 1 / 3);
-		h_conv_a = Nu_a * ki / di;
+		// Imatani & Sakai (2025) Eqs. (29)-(31), gas/air branch.
+		Real k_a=conductivity(temp_a,3);
+		Pr_a = heat_capacity(temp_a,3) * VISCOSITY_AIR / (k_a+1.0e-15);
+		Nu_a = sophia_case311_gunn_nusselt(pori,Rea,Pr_a);
+		h_conv_a = Nu_a * k_a / (di+1.0e-15);
 		dq_vol = h_conv_a * a_ht * temp_ija;
 	}
 
@@ -534,9 +556,12 @@ __global__ void KERNEL_DEM_coupling3D_dem(int_t inout,int_t*g_str_dem,int_t*g_en
 		dfza=(1.0/8.0)*Cdfa*rho_fa*3.14159*di*di*uzijfa*mag_uijfa*pow(pori,-1-betafa)/mi;
 
 
-		Pr_fa = 1.0;
-		Nu_fa = 2.0 + 0.6 * pow(Refa, 0.5) * pow(Pr_fa, 1 / 3);
-		h_conv_fa = Nu_fa * ki / di;
+		// Mixed-fluid fallback: use weighted mixture properties with the same paper Eqs. (29)-(31).
+		Real k_fa=conductivity(temp_fa,3)*f_air+conductivity(temp_fa,1)*f_fluid;
+		Real cp_fa=heat_capacity(temp_fa,3)*f_air+heat_capacity(temp_fa,1)*f_fluid;
+		Pr_fa = cp_fa * vis_fa / (k_fa+1.0e-15);
+		Nu_fa = sophia_case311_gunn_nusselt(pori,Refa,Pr_fa);
+		h_conv_fa = Nu_fa * k_fa / (di+1.0e-15);
 		dq_vol = h_conv_fa * a_ht * temp_ijfa;
 
 

@@ -15,7 +15,7 @@
 ## 주요 파일
 
 ```text
-source_modified/function_SPH_DEM_COUPLING.cuh   # SPH interpolation DEM heat conduction 추가
+source_modified/function_SPH_DEM_COUPLING.cuh   # SPH interpolation DEM heat conduction + paper Eq. (29)-(31) solid-fluid heat transfer
 source_modified/function_OUTPUT.cuh             # sph_solid_volume_fraction, sph_ks_eff 출력 추가
 source_modified/ISPH.cuh                        # Case 3-1-1 fixed-bed domain patch
 source_modified/Parameters.cuh                  # Case 3-1-1 gas property/inlet constants
@@ -31,6 +31,7 @@ validation/input_plots/input_particles_overview.png
 validation/input_plots/input_particles_3d_sample.png
 validation/input_plots/input_plot_summary.md
 experiment_spec.yaml
+equation_audit.md
 patch_summary.yaml
 ```
 
@@ -46,7 +47,7 @@ DEM은 200 mm x 40 mm x 40 mm 영역에 1 mm primitive cubic lattice로 배치�
 ## 열전달 수정 개념
 
 기존 코드에는 DEM particle이 주변 SPH gas/fluid 온도를 kernel interpolation으로 받아 convective heat transfer를 계산하는 부분이 이미 있었습니다.
-이번 수정은 여기에 solid-solid heat diffusion 항을 추가했습니다.
+이번 수정에서는 그 고체-유체 대류열전달식을 논문 Eq. (29)-(31)에 맞게 바꿨고, 여기에 solid-solid heat diffusion 항을 추가했습니다.
 
 핵심 구현 위치:
 
@@ -61,7 +62,8 @@ source_modified/function_SPH_DEM_COUPLING.cuh
 2. SPH kernel로 local solid volume fraction alpha_s 추정
 3. alpha_s에서 effective solid conductivity ks_eff 계산
 4. Brookshaw-style SPH heat Laplacian으로 dT/dt 계산
-5. 기존 fluid-particle convective dT/dt와 합산
+5. 고체-유체 대류항은 논문 Eq. (29) Gunn Nu_fs, Eq. (30) Pr, Eq. (31) h_fs/Q_fs로 계산
+6. solid-fluid convection dT/dt와 solid-solid diffusion dT/dt를 합산
 ```
 
 접촉 면적, 접촉 시간, DEM spring constant는 열전달식에 넣지 않았습니다.
